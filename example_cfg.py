@@ -8,7 +8,7 @@ import cuda_ext
 
 # Directory containing model, tokenizer, generator
 
-model_directory =  "/mnt/str/models/_test_models/TheBloke_Llama-2-13B-chat-GPTQ/"
+model_directory =  "/workspace/models/Yi-34B-GiftedConvo-merged-GPTQ"
 
 # Locate files we need within that directory
 
@@ -39,16 +39,16 @@ generator.settings.top_p = 0.75
 # Prompts to mix
 
 f1 = \
-"""[INST] <<SYS>>
-You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature. If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.
-<</SYS>>
-{prompt}[/INST]"""
+"""USER: You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature. If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.
+{prompt}
+ASSISTANT:
+"""
 
 f2 = \
-"""[INST] <<SYS>>
-<</SYS>>
-You are a rude and obnoxious assistant. You hate everything and everyone.
-{prompt}[/INST]"""
+"""USER: You are a rude and obnoxious assistant. You hate everything and everyone.
+{prompt}
+ASSISTANT:
+"""
 
 
 prompts = \
