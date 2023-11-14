@@ -30,17 +30,17 @@ class ExllamaModel:
 
         config = ExLlamaConfig(str(model_config_path))
         config.model_path = str(model_path)
-        config.max_seq_len = cfg.max_seq_len
-        config.compress_pos_emb = cfg.compress_pos_emb
-        if cfg.gpu_split:
-            config.set_auto_map(cfg.gpu_split)
+        config.max_seq_len = cfg['max_seq_len']
+        config.compress_pos_emb = cfg['compress_pos_emb']
+        if cfg['gpu_split']:
+            config.set_auto_map(cfg['gpu_split'])
             config.gpu_peer_fix = True
 
-        if cfg.alpha_value > 1 and cfg.rope_freq_base == 0:
-            config.alpha_value = cfg.alpha_value
+        if cfg['alpha_value'] > 1 and cfg['rope_freq_base'] == 0:
+            config.alpha_value = cfg['alpha_value']
             config.calculate_rotary_embedding_base()
-        elif cfg.rope_freq_base > 0:
-            config.rotary_embedding_base = cfg.rope_freq_base
+        elif cfg['rope_freq_base'] > 0:
+            config.rotary_embedding_base = cfg['rope_freq_base']
 
         if torch_version.hip:
             config.rmsnorm_no_half2 = True

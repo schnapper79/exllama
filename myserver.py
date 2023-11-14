@@ -41,7 +41,16 @@ def load_model():
     directory= os.path.join(app.config['MODEL_DIRECTORY'],path_to_model)
     if os.path.exists(directory) and os.path.isdir(directory):
         model = ExllamaModel.from_pretrained(directory, cfg)
-        return jsonify({"message": "Model loaded successfully"}), 200
+                
+        # Check the type of config
+        print(type(model.config))  # This will print the type of model.config
+
+        # Optionally, print the config if it's a dictionary
+        if isinstance(model.config, dict):
+            print(model.config)
+
+        return jsonify({"message": "Model loaded successfully", "config": model.config if isinstance(model.config, dict) else {}}), 200
+    
     else:
         return jsonify({"error": "Path to model does not exist"}), 404
 
