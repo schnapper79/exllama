@@ -2,12 +2,13 @@ from flask import Flask, request, jsonify
 import json
 from mymodel import ExllamaModel
 import argparse, os
+from waitress import serve
 
 # Create the parser
 parser = argparse.ArgumentParser(description='Flask app with model directory')
 
 # Add an argument
-parser.add_argument('-d', type=str, help='Path to the model directory',default='/workspace/models')
+parser.add_argument('-d','--directory', type=str, help='Path to the model directory',default='/workspace/models')
 
 # Parse the arguments
 args = parser.parse_args()
@@ -33,11 +34,13 @@ def load_model():
     path_to_model = cfg.pop('path_to_model', None)
     if not path_to_model:
         return jsonify({"error": "Path to model is required"}), 400
+   
+    # cfg.setdefault('truncation_length', cfg['max_seq_len'] - 4)
+    
 
-    # Validate other cfg parameters here if necessary
     directory= os.path.join(app.config['MODEL_DIRECTORY'],path_to_model)
     if os.path.exists(directory) and os.path.isdir(directory):
-        model = ExLlamaModel.from_pretrained(, cfg)
+        model = ExllamaModel.from_pretrained(directory, cfg)
         return jsonify({"message": "Model loaded successfully"}), 200
     else:
         return jsonify({"error": "Path to model does not exist"}), 404
@@ -86,4 +89,4 @@ def list_models():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    serve(app, host='0.0.0.0', port=8080)

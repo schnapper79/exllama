@@ -10,8 +10,8 @@ from tokenizer import ExLlamaTokenizer
 import os, glob
 
 
-def get_max_prompt_length(state):
-    return state['truncation_length'] - state['max_new_tokens']
+def get_max_prompt_length(state, tl):
+    return tl - state['max_new_tokens']
 
 def clear_torch_cache():
     gc.collect()
@@ -122,7 +122,7 @@ class ExllamaModel:
                     [torch.tensor([[self.tokenizer.bos_token_id]]).to(ids.device),
                      ids], dim=1
                 ).to(torch.int64)
-            ids = ids[:, -get_max_prompt_length(state):]
+            ids = ids[:, -get_max_prompt_length(state,self.config.max_seq_len-4):]
             if state['auto_max_new_tokens']:
                 max_new_tokens = state['truncation_length'] - ids.shape[-1]
             else:
